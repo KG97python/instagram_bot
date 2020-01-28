@@ -18,14 +18,14 @@ class Instagram:
         password = bot.find_element_by_name("password")
         email.clear()
         password.clear()
-        email.send_keys(self.username)
-        password.send_keys(self.password)
+        email.send_keys('3234717654')
+        password.send_keys('Sujely97')
         password.send_keys(Keys.RETURN)
         time.sleep(2)
 
     def follow(self, entry3):
         bot = self.bot
-        bot.get('https://www.instagram.com/' + str(entry3) + '/followers/')
+        bot.get('https://www.instagram.com/explore/tags/' + str(entry3))
         pyautogui.moveTo(2000, None, 1)
         time.sleep(0.5)
         for i in range(1, 6):
