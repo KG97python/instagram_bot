@@ -1,5 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 import time
 import pyautogui
 from tkinter import *
@@ -9,6 +13,7 @@ class Instagram:
         self.username = username
         self.password = password
         self.bot = webdriver.Chrome()
+        self.wait = WebDriverWait(self.bot, 20)
 
     def login(self):
         bot = self.bot
@@ -18,29 +23,42 @@ class Instagram:
         password = bot.find_element_by_name("password")
         email.clear()
         password.clear()
-        email.send_keys('3234717654')
-        password.send_keys('Sujely97')
+        email.send_keys(self.username)
+        password.send_keys(self.password)
         password.send_keys(Keys.RETURN)
         time.sleep(2)
 
-    def follow(self, entry3):
+    def like(self, entry3, entry4):
         bot = self.bot
+        n = int(str(entry4))
         bot.get('https://www.instagram.com/explore/tags/' + str(entry3))
-        pyautogui.moveTo(2000, None, 1)
         time.sleep(0.5)
-        for i in range(1, 6):
-            for j in range(1, 15):
-                pyautogui.click(pyautogui.locateCenterOnScreen('experiment.png'), duration=1)
-                time.sleep(0.5)
-                pyautogui.moveTo(2000, None, 1)
-                time.sleep(0.5)
-            bot.execute_script('window.scrollTo(0,document.body.scrollHeight)')
+        bot.find_element_by_xpath("//*[@id='react-root']").click()
+        time.sleep(0.5)
+        for i in range(n):
+            likes = bot.find_element_by_xpath("//*[@aria-label='Like']")
+            time.sleep(0.2)
+            likes.click()
+            time.sleep(0.2)
+            bot.find_element_by_link_text('Next').click()
             time.sleep(0.2)
 
+    def follow(self):
+        bot = self.bot
+        time.sleep(3)
+        for j in range(21):
+            follow_button = bot.find_element_by_xpath('/html/body/div[4]/div[2]/div/article/header/div[2]/div[1]/div[2]/button')
+            time.sleep(0.5)
+            follow_button.click()
+            bot.find_element_by_link_text('Next').click()
+            time.sleep(0.5)
+
+# Main execution function
 def execute():
     log = Instagram(str(entry1.get()), str(entry2.get()))
     log.login()
-    log.follow(entry3.get())
+    log.like(entry3.get(), entry4.get())
+    log.follow()
 
 # dtinker gui
 window = Tk()
@@ -60,6 +78,12 @@ hashtag = Label(window, text="enter your hashtag here", font='times 24 bold')
 hashtag.grid(row=3, column=0)
 entry3 = Entry(window)
 entry3.grid(row=3, column=6)
+
+likes = Label(window, text="How many likes do you want to automate?", font='times 24 bold')
+likes.grid(row=5, column=0)
+entry4 = Entry(window)
+entry4.grid(row=5, column=6)
+
 
 b1 = Button(window, text=" GO ", command=execute, width=12, bg='gray')
 b1.grid(row=10, column=5)
