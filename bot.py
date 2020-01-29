@@ -5,7 +5,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import time
-import pyautogui
 from tkinter import *
 
 class Instagram:
@@ -15,6 +14,7 @@ class Instagram:
         self.bot = webdriver.Chrome()
         self.wait = WebDriverWait(self.bot, 20)
 
+# simple automated login, sends keys from user input in gui
     def login(self):
         bot = self.bot
         bot.get('https://www.instagram.com/accounts/login/?source=auth_switcher')
@@ -27,6 +27,9 @@ class Instagram:
         password.send_keys(self.password)
         password.send_keys(Keys.RETURN)
         time.sleep(2)
+
+# Problem: in the likelyhood that the pic has already been liked the program will actually stop working.
+# sometimes it will actually just click next and move on. However, I still must come up with a solution.
 
     def like(self, entry3, entry4):
         bot = self.bot
